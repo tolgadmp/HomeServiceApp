@@ -1,6 +1,7 @@
 package com.finalproject.homeservice.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,7 +16,7 @@ public class Expertise {
     private String description;
 
     @OneToMany(mappedBy = "expertise" ,cascade = CascadeType.ALL)
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
     @OneToOne
     @JoinColumn(name = "job_definition_id")

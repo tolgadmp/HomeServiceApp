@@ -25,6 +25,18 @@ public class Job {
     @OneToMany(mappedBy = "job" , cascade = CascadeType.ALL)
     private Set<Offer> offer = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "job_attribute_choices",
+            joinColumns = @JoinColumn(name = "job_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "attribute_id", referencedColumnName = "id"))
+    private Set<Attribute> attributes = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "job_attribute_choices",
+            joinColumns = @JoinColumn(name = "job_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "choice_id", referencedColumnName = "id"))
+    private Set<Choice> choices = new HashSet<>();
+
 
 
 

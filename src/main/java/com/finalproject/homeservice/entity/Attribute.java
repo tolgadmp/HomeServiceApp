@@ -16,6 +16,6 @@ public class Attribute {
     private String property;
 
     @OneToMany(mappedBy = "attribute", cascade = CascadeType.ALL)
-    private Set<Choice> choices;
+    private Set<Choice> choices = new HashSet<>();
 
 }

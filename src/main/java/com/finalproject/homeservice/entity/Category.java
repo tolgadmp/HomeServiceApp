@@ -16,6 +16,6 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category" ,cascade = CascadeType.ALL)
-    private Set<JobDefinition> jobDefinitions;
+    private Set<JobDefinition> jobDefinitions = new HashSet<>();
 
 }

@@ -14,6 +14,8 @@ public class Post {
     private Long id;
     private String title;
     private String content;
+    @Column(name = "image_path")
+    private String imagePath;
     @Column(name = "creation_date")
     private Date creationDate;
     @OneToMany(mappedBy = "post" , cascade = CascadeType.ALL, orphanRemoval = true)
