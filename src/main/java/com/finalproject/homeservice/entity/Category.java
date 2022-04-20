@@ -1,9 +1,18 @@
 package com.finalproject.homeservice.entity;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "category")
 public class Category {
@@ -16,6 +25,6 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category" ,cascade = CascadeType.ALL)
-    private Set<JobDefinition> jobDefinitions = new HashSet<>();
+    private List<JobDefinition> jobDefinitions = new ArrayList<>();
 
 }

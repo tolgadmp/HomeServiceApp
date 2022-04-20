@@ -1,6 +1,7 @@
 package com.finalproject.homeservice.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "choices")
@@ -10,9 +11,10 @@ public class Choice {
     private Long id;
     private String seleciton;
 
-    @ManyToOne
-    @JoinColumn(name = "attribute_id", nullable = false)
-    private Attribute attribute;
+    @ManyToMany(mappedBy = "choices")
+    private List<Attribute> attributes;
+
+
 
 
 }
