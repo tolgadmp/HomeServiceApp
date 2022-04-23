@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/jobDefinition")
+@RequestMapping("/api/job-definition")
 public class JobDefinitionController {
 
     private final JobDefinitionService jobDefinitionService;
@@ -17,14 +17,10 @@ public class JobDefinitionController {
         this.jobDefinitionService = jobDefinitionService;
     }
 
-    @GetMapping
-    public List<JobDefinitionDto> getAllJobDefinitions(){
-        return jobDefinitionService.getAllJobDefinitions();
-    }
 
     @GetMapping("/{id}")
-    public List<JobDefinitionDto> getJobDefinitionsByCategoryId(@PathVariable(name = "id")long id){
-        return jobDefinitionService.getJobDefinitionByCategory(id);
+    public JobDefinitionDto getJobDefinitionWithAttributes(@PathVariable(name = "id")long id){
+        return jobDefinitionService.getJobDefinitionWithAttributes(id);
     }
 
 
