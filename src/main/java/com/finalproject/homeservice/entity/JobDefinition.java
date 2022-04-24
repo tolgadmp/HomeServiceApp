@@ -7,10 +7,10 @@ import java.util.List;
 
 
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "job_definitions")
 public class JobDefinition {
@@ -28,7 +28,7 @@ public class JobDefinition {
     @OneToMany(mappedBy = "jobDefinition")
     private List<Job> jobs;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "job_definition_attributes",
             joinColumns = @JoinColumn(name = "job_definition_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "attribute_id", referencedColumnName = "id"))

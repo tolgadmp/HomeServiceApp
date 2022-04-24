@@ -21,11 +21,18 @@ public class AttributeDto {
     private List<ChoiceDto> choiceDtos;
 
 
-    public AttributeDto mapEntityToDto(Attribute attribute){
+    public static AttributeDto mapEntityToDto(Attribute attribute){
         AttributeDto attributeDto = new AttributeDto();
         attributeDto.setId(attribute.getId());
         attributeDto.setProperty(attribute.getProperty());
         return attributeDto;
+    }
+
+    public static Attribute mapDtoToEntity(AttributeDto attributeDto){
+        Attribute attribute = new Attribute();
+        attribute.setId(attributeDto.getId());
+        attribute.setProperty(attributeDto.getProperty());
+        return attribute;
     }
 
     public static List<AttributeDto> mapEntityListToDtoList(List<Attribute> attributes){

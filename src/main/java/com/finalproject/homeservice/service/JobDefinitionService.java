@@ -1,12 +1,15 @@
 package com.finalproject.homeservice.service;
 
 import com.finalproject.homeservice.entity.Attribute;
+import com.finalproject.homeservice.entity.Category;
 import com.finalproject.homeservice.entity.JobDefinition;
 import com.finalproject.homeservice.payload.AttributeDto;
 import com.finalproject.homeservice.payload.JobDefinitionDto;
-import com.finalproject.homeservice.repository.AttributeRepository;
-import com.finalproject.homeservice.repository.ChoiceRepository;
+import com.finalproject.homeservice.payload.JobDefinitionRequestDto;
+import com.finalproject.homeservice.payload.JobDefinitionResponseDto;
+import com.finalproject.homeservice.repository.CategoryRepository;
 import com.finalproject.homeservice.repository.JobDefinitionRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,15 +19,18 @@ import java.util.stream.Collectors;
 public class JobDefinitionService {
 
     private final JobDefinitionRepository jobDefinitionRepository;
-    private final AttributeRepository attributeRepository;
-    private final ChoiceRepository choiceRepository;
+    private final AttributeService attributeService;
+    private final ChoiceService choiceService;
+    private final CategoryRepository categoryRepository;
 
     public JobDefinitionService(JobDefinitionRepository jobDefinitionRepository,
-                                AttributeRepository attributeRepository,
-                                ChoiceRepository choiceRepository) {
+                                @Lazy AttributeService attributeService,
+                                ChoiceService choiceService,
+                                CategoryRepository categoryRepository) {
         this.jobDefinitionRepository = jobDefinitionRepository;
-        this.attributeRepository = attributeRepository;
-        this.choiceRepository = choiceRepository;
+        this.attributeService = attributeService;
+        this.choiceService = choiceService;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<JobDefinitionDto> getAllJobDefinitions(){
@@ -44,15 +50,34 @@ public class JobDefinitionService {
         return jobList;
     }
 
-    public JobDefinitionDto getJobDefinitionWithAttributes(long id){
+    public JobDefinitionResponseDto getJobDefinitionById(long id){
         JobDefinition jobDefinition = jobDefinitionRepository.getById(id);
-        List<Attribute> attributes = attributeRepository.getAttributesByJobDefinitions(jobDefinition);
-        attributes.stream().
-                forEach(attribute -> attribute.setChoices(choiceRepository.getChoicesByAttributes(attribute)));
-        List<AttributeDto> jobDefinitionAttributes = AttributeDto.mapEntityListToDtoList(attributes);
+        JobDefinitionResponseDto jobDefinitionResponseDto = JobDefinitionResponseDto.mapEntityToDto(jobDefinition);
+        return jobDefinitionResponseDto;
+    }
+
+    public JobDefinitionDto getJobDefinitionWithAttributes(long id){
+
+        JobDefinition jobDefinition = jobDefinitionRepository.getById(id);
+        List<AttributeDto> attributes = attributeService.getAttributeByJobDefinition(jobDefinition);
+        attributes
+                .forEach(attributeDto -> attributeDto.setChoiceDtos(choiceService.getChoicesByAttributes(attributeDto)));
         JobDefinitionDto jobDefinitionDto = mapToDto(jobDefinition);
-        jobDefinitionDto.setAttributes(jobDefinitionAttributes);
+        jobDefinitionDto.setAttributes(attributes);
+
         return jobDefinitionDto;
+    }
+
+    public JobDefinitionResponseDto addJobDefiniton(JobDefinitionRequestDto jobDefinitionRequestDto, long id){
+        Category category = categoryRepository.getById(id);
+       JobDefinition jobDefinition = JobDefinitionRequestDto.mapDtoToEntity(jobDefinitionRequestDto);
+       jobDefinition.setCategory(category);
+       JobDefinition newJobDefiniton = jobDefinitionRepository.save(jobDefinition);
+       return JobDefinitionResponseDto.mapEntityToDto(newJobDefiniton);
+    }
+
+    public void updateJobDefinition(JobDefinition jobDefinition){
+        jobDefinitionRepository.save(jobDefinition);
     }
 
 
