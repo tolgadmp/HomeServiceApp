@@ -7,7 +7,8 @@ import java.util.List;
 
 
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -28,7 +29,7 @@ public class JobDefinition {
     @OneToMany(mappedBy = "jobDefinition")
     private List<Job> jobs;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "job_definition_attributes",
             joinColumns = @JoinColumn(name = "job_definition_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "attribute_id", referencedColumnName = "id"))

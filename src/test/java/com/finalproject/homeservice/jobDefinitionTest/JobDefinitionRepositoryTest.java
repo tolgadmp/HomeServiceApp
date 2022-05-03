@@ -1,6 +1,8 @@
 package com.finalproject.homeservice.jobDefinitionTest;
 
+import com.finalproject.homeservice.entity.Attribute;
 import com.finalproject.homeservice.entity.JobDefinition;
+import com.finalproject.homeservice.repository.AttributeRepository;
 import com.finalproject.homeservice.repository.JobDefinitionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class JobDefinitionRepositoryTest {
 
     @Autowired
     private JobDefinitionRepository jobDefinitionRepository;
+    @Autowired
+    private AttributeRepository attributeRepository;
 
     @Test
     public void getJobDefinitionByCategoryId(){
@@ -24,5 +28,13 @@ public class JobDefinitionRepositoryTest {
         List<JobDefinition> jobDefinitionList =
                 jobDefinitionRepository.getJobDefinitionByCategoryId(id);
         jobDefinitionList.forEach(System.out::println);
+    }
+
+    @Test
+    public void getJobDefinitionWithAttributes(){
+        long id = 1;
+        JobDefinition jobDefinition = jobDefinitionRepository.getById(id);
+        List<Attribute> attributes = attributeRepository.getAttributesByJobDefinitions(jobDefinition);
+        attributes.forEach(System.out::println);
     }
 }

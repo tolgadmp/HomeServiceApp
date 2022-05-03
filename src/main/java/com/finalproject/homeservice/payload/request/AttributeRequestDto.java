@@ -1,4 +1,4 @@
-package com.finalproject.homeservice.payload;
+package com.finalproject.homeservice.payload.request;
 
 import com.finalproject.homeservice.entity.Attribute;
 import lombok.AllArgsConstructor;
@@ -12,13 +12,13 @@ public class AttributeRequestDto {
 
     private String property;
 
-    public static AttributeRequestDto mapEntityToDto(Attribute attribute){
+    public static AttributeRequestDto mapEntityToRequestDto(Attribute attribute){
         AttributeRequestDto attributeRequestDto = new AttributeRequestDto();
         attributeRequestDto.setProperty(attribute.getProperty());
         return attributeRequestDto;
     }
 
-    public static Attribute mapDtoToEntity(AttributeRequestDto attributeRequestDto){
+    public static Attribute mapRequestDtoToEntity(AttributeRequestDto attributeRequestDto){
         Attribute attribute = new Attribute();
         attribute.setProperty(attributeRequestDto.getProperty());
         return attribute;

@@ -1,7 +1,7 @@
 package com.finalproject.homeservice.controller;
 
 import com.finalproject.homeservice.payload.CategoryDto;
-import com.finalproject.homeservice.payload.JobDefinitionDto;
+import com.finalproject.homeservice.payload.response.JobDefinitionResponseDto;
 import com.finalproject.homeservice.service.CategoryService;
 import com.finalproject.homeservice.service.JobDefinitionService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +31,7 @@ public class HomeController {
     }
 
     @GetMapping("/{id}")
-    public List<JobDefinitionDto> getJobDefinitionsByCategoryId(@PathVariable(name = "id")long id){
+    public List<JobDefinitionResponseDto> getJobDefinitionsByCategoryId(@PathVariable(name = "id")long id){
         return jobDefinitionService.getJobDefinitionByCategory(id);
     }
 }

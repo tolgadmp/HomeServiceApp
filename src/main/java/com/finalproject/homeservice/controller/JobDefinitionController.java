@@ -1,8 +1,10 @@
 package com.finalproject.homeservice.controller;
 
-import com.finalproject.homeservice.payload.*;
-import com.finalproject.homeservice.service.AttributeService;
+import com.finalproject.homeservice.payload.request.JobDefinitionRequestDto;
+import com.finalproject.homeservice.payload.response.JobDefinitionResponseDto;
 import com.finalproject.homeservice.service.JobDefinitionService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -10,31 +12,35 @@ import org.springframework.web.bind.annotation.*;
 public class JobDefinitionController {
 
     private final JobDefinitionService jobDefinitionService;
-    private final AttributeService attributeService;
 
-    public JobDefinitionController(JobDefinitionService jobDefinitionService,
-                                   AttributeService attributeService) {
+    public JobDefinitionController(JobDefinitionService jobDefinitionService) {
         this.jobDefinitionService = jobDefinitionService;
-        this.attributeService = attributeService;
     }
 
-
     @GetMapping("/{id}")
-    public JobDefinitionDto getJobDefinitionWithAttributes(@PathVariable(name = "id")long id){
-        return jobDefinitionService.getJobDefinitionWithAttributes(id);
+    public ResponseEntity<JobDefinitionResponseDto> getJobDefinitionWithAttributes(@PathVariable(name = "id")long id){
+        return new ResponseEntity<>(jobDefinitionService.getJobDefinitionWithAttributes(id), HttpStatus.OK);
     }
 
     @PostMapping("/{categoryId}")
-    public JobDefinitionResponseDto addJobDefinition(@RequestBody JobDefinitionRequestDto jobDefinitionRequestDto,
+    public ResponseEntity<JobDefinitionResponseDto> createJobDefinition(@RequestBody JobDefinitionRequestDto jobDefinitionRequestDto,
                                                      @PathVariable(value = "categoryId")long id){
-       return jobDefinitionService.addJobDefiniton(jobDefinitionRequestDto,id);
+       return new ResponseEntity<>(jobDefinitionService.createJobDefiniton(jobDefinitionRequestDto,id), HttpStatus.OK) ;
     }
 
-    @PostMapping("/add-attribute/{id}")
-    public AttributeDto addAttributeToJob(@RequestBody AttributeRequestDto attributeRequestDto,
-                                          @PathVariable(value = "id")long id){
-        return attributeService.addAttribute(id, attributeRequestDto);
+    @PutMapping("/{id}")
+    public ResponseEntity<JobDefinitionResponseDto> updateJobDefinition(@RequestBody JobDefinitionRequestDto requestDto,
+                                                                        @PathVariable(name = "id")long id){
+        return new ResponseEntity<>(jobDefinitionService.updateJobDefinition(id, requestDto), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteJobDefinition(@PathVariable(name = "id")long id){
+        jobDefinitionService.deleteJobDefinition(id);
+        return new ResponseEntity<>("JobDefinition başarıyla silindi." ,HttpStatus.OK);
+    }
+
+
 
 
 }

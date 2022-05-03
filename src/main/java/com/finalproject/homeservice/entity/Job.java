@@ -14,6 +14,7 @@ public class Job {
 
     private String description;
     private boolean status;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User customer;

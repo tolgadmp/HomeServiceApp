@@ -1,9 +1,6 @@
 package com.finalproject.homeservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +9,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "attributes")
 public class Attribute {
@@ -23,13 +21,13 @@ public class Attribute {
     //telikeli
     private String property;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "atribte_choices",
             joinColumns = @JoinColumn(name = "attribute_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "choice_id", referencedColumnName = "id"))
     private List<Choice> choices;
 
-    @ManyToMany(mappedBy = "attributes")
+    @ManyToMany(mappedBy = "attributes", cascade = CascadeType.DETACH)
     private List<JobDefinition> jobDefinitions;
 
 }

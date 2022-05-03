@@ -1,12 +1,10 @@
 package com.finalproject.homeservice.service;
 
-import com.finalproject.homeservice.entity.Attribute;
 import com.finalproject.homeservice.entity.Category;
 import com.finalproject.homeservice.entity.JobDefinition;
-import com.finalproject.homeservice.payload.AttributeDto;
-import com.finalproject.homeservice.payload.JobDefinitionDto;
-import com.finalproject.homeservice.payload.JobDefinitionRequestDto;
-import com.finalproject.homeservice.payload.JobDefinitionResponseDto;
+import com.finalproject.homeservice.payload.request.JobDefinitionRequestDto;
+import com.finalproject.homeservice.payload.response.AttributeResponseDto;
+import com.finalproject.homeservice.payload.response.JobDefinitionResponseDto;
 import com.finalproject.homeservice.repository.CategoryRepository;
 import com.finalproject.homeservice.repository.JobDefinitionRepository;
 import org.springframework.context.annotation.Lazy;
@@ -33,63 +31,66 @@ public class JobDefinitionService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<JobDefinitionDto> getAllJobDefinitions(){
+    public List<JobDefinitionResponseDto> getAllJobDefinitions(){
         List<JobDefinition> jobList =  jobDefinitionRepository.findAll();
-        List<JobDefinitionDto> jobs = jobList.stream()
-                .map(jobDefinition -> mapToDto(jobDefinition))
+        List<JobDefinitionResponseDto> responseDtos = jobList.stream()
+                .map(jobDefinition -> JobDefinitionResponseDto.mapEntityToResponseDto(jobDefinition))
                 .collect(Collectors.toList());
-        return jobs;
+        return responseDtos;
     }
 
-    public List<JobDefinitionDto> getJobDefinitionByCategory(long id){
+    public List<JobDefinitionResponseDto> getJobDefinitionByCategory(long id){
         List<JobDefinition> jobDefinitions = jobDefinitionRepository.getJobDefinitionByCategoryId(id);
-        List<JobDefinitionDto> jobList = jobDefinitions
+        List<JobDefinitionResponseDto> responseDtos = jobDefinitions
                 .stream()
-                .map(jobDefinition -> mapToDto(jobDefinition))
+                .map(jobDefinition -> JobDefinitionResponseDto.mapEntityToResponseDto(jobDefinition))
                 .collect(Collectors.toList());
-        return jobList;
+        return responseDtos;
     }
 
     public JobDefinitionResponseDto getJobDefinitionById(long id){
         JobDefinition jobDefinition = jobDefinitionRepository.getById(id);
-        JobDefinitionResponseDto jobDefinitionResponseDto = JobDefinitionResponseDto.mapEntityToDto(jobDefinition);
+        JobDefinitionResponseDto jobDefinitionResponseDto = JobDefinitionResponseDto.mapEntityToResponseDto(jobDefinition);
         return jobDefinitionResponseDto;
     }
 
-    public JobDefinitionDto getJobDefinitionWithAttributes(long id){
+    public JobDefinitionResponseDto getJobDefinitionWithAttributes(long id){
 
         JobDefinition jobDefinition = jobDefinitionRepository.getById(id);
-        List<AttributeDto> attributes = attributeService.getAttributeByJobDefinition(jobDefinition);
+        List<AttributeResponseDto> attributes = attributeService.getAttributeByJobDefinition(jobDefinition);
         attributes
-                .forEach(attributeDto -> attributeDto.setChoiceDtos(choiceService.getChoicesByAttributes(attributeDto)));
-        JobDefinitionDto jobDefinitionDto = mapToDto(jobDefinition);
-        jobDefinitionDto.setAttributes(attributes);
-
-        return jobDefinitionDto;
+                .forEach(responseDto -> responseDto.setChoiceResponseDtos(choiceService.getChoicesByAttributes(responseDto)));
+        JobDefinitionResponseDto responseDto = JobDefinitionResponseDto.mapEntityToResponseDto(jobDefinition);
+        responseDto.setAttributes(attributes);
+        return responseDto;
     }
 
-    public JobDefinitionResponseDto addJobDefiniton(JobDefinitionRequestDto jobDefinitionRequestDto, long id){
+    public JobDefinitionResponseDto createJobDefiniton(JobDefinitionRequestDto jobDefinitionRequestDto, long id){
         Category category = categoryRepository.getById(id);
-       JobDefinition jobDefinition = JobDefinitionRequestDto.mapDtoToEntity(jobDefinitionRequestDto);
+       JobDefinition jobDefinition = JobDefinitionRequestDto.mapRequestDtoToEntity(jobDefinitionRequestDto);
        jobDefinition.setCategory(category);
        JobDefinition newJobDefiniton = jobDefinitionRepository.save(jobDefinition);
-       return JobDefinitionResponseDto.mapEntityToDto(newJobDefiniton);
+       return JobDefinitionResponseDto.mapEntityToResponseDto(newJobDefiniton);
     }
 
-    public void updateJobDefinition(JobDefinition jobDefinition){
+    public void saveJobDefinition(JobDefinition jobDefinition){
         jobDefinitionRepository.save(jobDefinition);
     }
 
+    public JobDefinitionResponseDto updateJobDefinition(long id, JobDefinitionRequestDto requestDto){
 
+        JobDefinition jobDefinition = jobDefinitionRepository.getById(id);
+        jobDefinition.setId(requestDto.getId());
+        jobDefinition.setName(requestDto.getName());
+        jobDefinition.setDescription(requestDto.getDescription());
+        jobDefinitionRepository.save(jobDefinition);
 
-    private JobDefinitionDto mapToDto(JobDefinition jobDefinition){
+        return  JobDefinitionResponseDto.mapEntityToResponseDto(jobDefinition);
+    }
 
-        JobDefinitionDto jobDefinitionDto = new JobDefinitionDto();
-        jobDefinitionDto.setId(jobDefinition.getId());
-        jobDefinitionDto.setName(jobDefinition.getName());
-        jobDefinitionDto.setDescription(jobDefinition.getDescription());
-
-        return jobDefinitionDto;
+    public void deleteJobDefinition(long id){
+        JobDefinition jobDefinition = jobDefinitionRepository.getById(id);
+        jobDefinitionRepository.delete(jobDefinition);
     }
 
 }
