@@ -31,12 +31,24 @@ public class UserController {
     }
 
     @PostMapping("/add-address")
-    public ResponseEntity<String> createAdress(@RequestBody AddressRequestDto requestDto){
+    public ResponseEntity<String> createAddress(@RequestBody AddressRequestDto requestDto){
         String email = getUserByContext();
         addressService.createAddress(requestDto,email);
         return new ResponseEntity<>("Adres ekleme başarılı", HttpStatus.OK);
     }
 
+    @PutMapping("/update-adress/{id}")
+    public ResponseEntity<String> updateAddress(@PathVariable(name = "id")long id,
+                                                @RequestBody AddressRequestDto requestDto){
+        addressService.updateAddress(id, requestDto);
+        return new ResponseEntity<>("Adres başarıyla güncellendi", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete-address/{id}")
+    public ResponseEntity<String> deleteAddress(@PathVariable(name = "id")long id){
+        addressService.deleteAddress(id);
+        return new ResponseEntity<>("Adres başarıyla silindi", HttpStatus.OK);
+    }
 
     private String getUserByContext(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
