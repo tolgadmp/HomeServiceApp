@@ -1,12 +1,22 @@
 package com.finalproject.homeservice.entity;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import lombok.*;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,15 +30,14 @@ public class User {
     private String password;
     private String phone;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<Address> addresses = new HashSet<>();
-    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
-    private Set<Role> roles = new HashSet<>();
-    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
-    private Set<Post> posts = new HashSet<>();
+    private List<Address> addresses = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Set<Job> jobs = new HashSet<>();
+    private List<Job> jobs = new ArrayList<>();
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
-    private Set<Offer> offers = new HashSet<>();
+    private List<Offer> offers = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "expertise_id")
     private Expertise expertise;

@@ -22,7 +22,11 @@ public class Choice {
     @ManyToMany(mappedBy = "choices")
     private List<Attribute> attributes;
 
-
+    @OneToMany(mappedBy = "choice")
+    private List<JobAttributeChoice> jobAttributeChoices;
+    
+    /*@ManyToMany(mappedBy = "choices")
+    private List<Job> jobs;*/
 
 
 }

@@ -32,9 +32,17 @@ public class JobDefinitionRepositoryTest {
 
     @Test
     public void getJobDefinitionWithAttributes(){
-        long id = 1;
+        long id = 2;
         JobDefinition jobDefinition = jobDefinitionRepository.getById(id);
         List<Attribute> attributes = attributeRepository.getAttributesByJobDefinitions(jobDefinition);
         attributes.forEach(System.out::println);
+    }
+
+    @Test
+    public void getJobDefinitionByAttribute(){
+        long id = 2;
+       Attribute attribute =  attributeRepository.getById(id);
+        List<JobDefinition> jobDefinitions = jobDefinitionRepository.getJobDefinitionsByAttributes(attribute);
+        jobDefinitions.forEach(System.out::println);
     }
 }

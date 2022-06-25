@@ -1,5 +1,6 @@
 package com.finalproject.homeservice.service;
 
+import com.finalproject.homeservice.entity.Attribute;
 import com.finalproject.homeservice.entity.Category;
 import com.finalproject.homeservice.entity.JobDefinition;
 import com.finalproject.homeservice.payload.request.JobDefinitionRequestDto;
@@ -88,9 +89,26 @@ public class JobDefinitionService {
         return  JobDefinitionResponseDto.mapEntityToResponseDto(jobDefinition);
     }
 
+    public void deleteAttributeFromJobDefiniton(long jobDefinitionId, long attributeId){
+        JobDefinition jobDefinition = jobDefinitionRepository.getById(jobDefinitionId);
+        List<AttributeResponseDto> attributes =  attributeService.getAttributeByJobDefinition(jobDefinition);
+        AttributeResponseDto removedAttribute = attributeService.getAttributeById(attributeId);
+        attributes.remove(removedAttribute);
+        List<Attribute> updatedAttributes = attributes.stream()
+                .map(attribute -> AttributeResponseDto.mapResponseDtoToEntity(attribute))
+                .collect(Collectors.toList());
+        jobDefinition.setAttributes(updatedAttributes);
+        jobDefinitionRepository.save(jobDefinition);
+    }
+
+
     public void deleteJobDefinition(long id){
         JobDefinition jobDefinition = jobDefinitionRepository.getById(id);
         jobDefinitionRepository.delete(jobDefinition);
+    }
+
+    public List<JobDefinition> getJobDefinitonsByAttribute(Attribute attribute){
+        return jobDefinitionRepository.getJobDefinitionsByAttributes(attribute);
     }
 
 }

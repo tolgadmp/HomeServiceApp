@@ -8,7 +8,7 @@ import com.finalproject.homeservice.payload.response.ChoiceResponseDto;
 import com.finalproject.homeservice.repository.ChoiceRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 import java.util.List;
@@ -33,6 +33,10 @@ public class ChoiceService {
                 .map(choice -> ChoiceResponseDto.mapEntityToResponseDto(choice))
                 .collect(Collectors.toList());
     }
+    public List<Choice> getChoicesByAttribute(Attribute attribute){
+       return choiceRepository.getChoicesByAttributes(attribute);
+    }
+
 
     public ChoiceResponseDto createChoice(long id, ChoiceRequestDto requestDto){
         Choice choice = ChoiceRequestDto.mapRequestDtoToEntity(requestDto);
@@ -56,8 +60,12 @@ public class ChoiceService {
         return ChoiceResponseDto.mapEntityToResponseDto(choice);
     }
 
-    public void deleteChoice(@PathVariable(name = "id")long id){
+    public void deleteChoice(long id){
         Choice choice = choiceRepository.getById(id);
+        List<Attribute> attributes = attributeService.getAttributesByChoice(choice);
+        attributes.clear();
+        choice.setAttributes(attributes);
+        choiceRepository.save(choice);
         choiceRepository.delete(choice);
     }
 

@@ -5,10 +5,12 @@ import com.finalproject.homeservice.payload.response.AttributeResponseDto;
 import com.finalproject.homeservice.service.AttributeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@PreAuthorize("hasRole('Admin')")
 @RestController
 @RequestMapping("/api/attribute")
 @CrossOrigin

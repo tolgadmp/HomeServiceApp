@@ -1,9 +1,16 @@
 package com.finalproject.homeservice.entity;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import lombok.*;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "jobs")
 public class Job {
@@ -24,21 +31,10 @@ public class Job {
     private JobDefinition jobDefinition;
 
     @OneToMany(mappedBy = "job" , cascade = CascadeType.ALL)
-    private Set<Offer> offer = new HashSet<>();
+    private List<Offer> offer = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "job_attribute_choices",
-            joinColumns = @JoinColumn(name = "job_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "attribute_id", referencedColumnName = "id"))
-    private Set<Attribute> attributes = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(name = "job_attribute_choices",
-            joinColumns = @JoinColumn(name = "job_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "choice_id", referencedColumnName = "id"))
-    private Set<Choice> choices = new HashSet<>();
-
-
+    @OneToMany(mappedBy = "job",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<JobAttributeChoice> jobAttributeChoices;
 
 
 }

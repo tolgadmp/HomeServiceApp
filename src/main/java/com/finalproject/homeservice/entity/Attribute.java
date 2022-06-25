@@ -27,7 +27,14 @@ public class Attribute {
             inverseJoinColumns = @JoinColumn(name = "choice_id", referencedColumnName = "id"))
     private List<Choice> choices;
 
-    @ManyToMany(mappedBy = "attributes", cascade = CascadeType.DETACH)
+    @ManyToMany(mappedBy = "attributes")
     private List<JobDefinition> jobDefinitions;
+
+    @OneToMany(mappedBy = "attribute")
+    private List<JobAttributeChoice> jobAttributeChoices;
+
+
+   /*@ManyToMany(mappedBy = "attributes")
+    private List<Job> jobs;*/
 
 }

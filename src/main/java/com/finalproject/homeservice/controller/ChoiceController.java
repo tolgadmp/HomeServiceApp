@@ -5,8 +5,10 @@ import com.finalproject.homeservice.payload.response.ChoiceResponseDto;
 import com.finalproject.homeservice.service.ChoiceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@PreAuthorize("hasRole('Admin')")
 @RestController
 @RequestMapping("/api/choice")
 @CrossOrigin
