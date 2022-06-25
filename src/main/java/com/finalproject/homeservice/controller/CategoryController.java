@@ -12,11 +12,11 @@ import java.util.List;
 @PreAuthorize("hasRole('Admin')")
 @RestController
 @RequestMapping("/api/category")
-public class CategoryContoller {
+public class CategoryController {
 
     private final CategoryService categoryService;
 
-    public CategoryContoller(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
