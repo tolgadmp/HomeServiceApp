@@ -32,9 +32,22 @@ public class CategoryService {
         return category;
     }
 
-    public void createCategory(Category category){
-        this.categoryRepository.save(category);
+    public void createCategory(CategoryDto categoryDto){
+        Category category = CategoryDto.mapDtoToEntity(categoryDto);
+        categoryRepository.save(category);
     }
 
+    public void updateCategory(long id, CategoryDto categoryDto){
+        Category category = categoryRepository.getById(id);
+        category.setCategoryName(categoryDto.getName());
+        category.setDescription(categoryDto.getDescription());
+
+        categoryRepository.save(category);
+    }
+
+    public void deleteCategory(long id){
+        Category category = categoryRepository.getById(id);
+        categoryRepository.delete(category);
+    }
 
 }

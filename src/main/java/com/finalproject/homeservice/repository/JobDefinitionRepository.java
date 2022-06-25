@@ -14,4 +14,6 @@ public interface JobDefinitionRepository extends JpaRepository<JobDefinition, Lo
 
     List<JobDefinition> getJobDefinitionsByAttributes(Attribute attribute);
 
+    JobDefinition getJobDefinitionsByName(String name);
+
 }

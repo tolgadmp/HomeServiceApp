@@ -4,6 +4,8 @@ import com.finalproject.homeservice.payload.CategoryDto;
 import com.finalproject.homeservice.payload.response.JobDefinitionResponseDto;
 import com.finalproject.homeservice.service.CategoryService;
 import com.finalproject.homeservice.service.JobDefinitionService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,12 +28,12 @@ public class HomeController {
     }
 
     @GetMapping
-    public List<CategoryDto> getAllCategories(){
-        return categoryService.getAllCategories();
+    public ResponseEntity<List<CategoryDto>> getAllCategories(){
+        return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public List<JobDefinitionResponseDto> getJobDefinitionsByCategoryId(@PathVariable(name = "id")long id){
-        return jobDefinitionService.getJobDefinitionByCategory(id);
+    public ResponseEntity<List<JobDefinitionResponseDto>> getJobDefinitionsByCategoryId(@PathVariable(name = "id")long id){
+        return new ResponseEntity<>(jobDefinitionService.getJobDefinitionByCategory(id),HttpStatus.OK);
     }
 }

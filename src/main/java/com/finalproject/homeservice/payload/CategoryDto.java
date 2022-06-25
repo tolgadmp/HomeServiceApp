@@ -10,16 +10,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryDto {
 
-
-    private Long id;
     private String name;
     private String description;
 
     public static CategoryDto mapEntityToDto(Category category){
         CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setId(category.getId());
         categoryDto.setName(category.getCategoryName());
         categoryDto.setDescription(category.getDescription());
         return categoryDto;
+    }
+
+    public static Category mapDtoToEntity(CategoryDto categoryDto){
+        return Category.builder()
+                .categoryName(categoryDto.getName())
+                .description((categoryDto.getDescription()))
+                .build();
     }
 }
